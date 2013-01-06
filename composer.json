@@ -1,0 +1,15 @@
+{
+    "name":"fbrnc/pulsestorm_launcher",
+    "type":"magento-module",
+    "license":"OSL-3.0",
+    "homepage":"http://alanstorm.com/category/magento#magento_pulse_storm_launcher",
+    "description":"Pulsestom_Launcher by Alan Storm.",
+    "authors":[
+        {
+            "name":"Alan Storm",
+        }
+    ],
+    "require":{
+        "magento-hackathon/magento-composer-installer":"dev-master"
+    }
+}
