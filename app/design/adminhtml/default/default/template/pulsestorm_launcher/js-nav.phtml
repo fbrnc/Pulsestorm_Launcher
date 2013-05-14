@@ -7,7 +7,13 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
 */
+
+/**
+ * @var $this Mage_Adminhtml_Block_Template
+ */
+
 ?>
 <script type="text/javascript">
     var pulsestorm_launcher_menu            = <?php echo $this->getJson(); ?>;    
@@ -189,8 +195,8 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
                     {
                         // console.log("Bailing");
                         return;
-                    }     
-                    
+                    }
+
                     if(e.which == 13)
                     {
                         go_to_highlighted_link();
@@ -200,59 +206,62 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
                     //cancel/reset interval
                     if(timeout_search)
                     {
-                        clearTimeout(timeout_search); 
+                        clearTimeout(timeout_search);
                     }
-                    if($F('pulsestorm_launcher_input') && $F('pulsestorm_launcher_input').length > 2)
-                    {
-                        timeout_search = setTimeout(function(){
-                            //abort other pending requests
-                            if(search_requests.length > 0)
-                            {
-                                var old_search;
-                                while(old_search = search_requests.pop())
+
+                    <?php if (Mage::getStoreConfig('pulsestorm_launcher/options/global_search_enabled')): ?>
+                        if($F('pulsestorm_launcher_input') && $F('pulsestorm_launcher_input').length > 2)
+                        {
+                            timeout_search = setTimeout(function(){
+                                //abort other pending requests
+                                if(search_requests.length > 0)
                                 {
-                                    old_search.transport.abort();
-                                    console.log("aborting");
+                                    var old_search;
+                                    while(old_search = search_requests.pop())
+                                    {
+                                        old_search.transport.abort();
+                                        console.log("aborting");
+                                    }
                                 }
-                            }
-                            
-                            var url = pulsestorm_launcher_search_url.url;
-                            url += ('?query='+$F('pulsestorm_launcher_input'));
-                            // var url = 'http://magento1point7pointzeropoint1.dev/index.php/admin/index/globalSearch/key/ac3d62400d96f06be161863f7e4470d3/?query=nokia';
-                            
-                            var img = new Element('img');
-                            img.src = '/skin/adminhtml/default/default/images/ajax-loader.gif';                            
-                            var p = new Element('p');
-                            p.insert(img);
-                            p.id = 'pulsestorm_launcher_throbber';
-                            $('pulsestorm_launcher_results').insert(p);
-                            
-                            var search_request = new Ajax.Request(url, {
-                                method: 'get',
-                                onSuccess: function(transport) {
-                                    var container = new Element('div');
-                                    container.update(transport.responseText);
-                                    $('pulsestorm_launcher_throbber').remove();
-                                    container.getElementsBySelector('li strong').each(function(element){                                        
-                                        if(!element.parentNode)
-                                        {
-                                            return;
-                                        }
-                                        
-                                        var url = $(element.parentNode).readAttribute('url');
-                                        var row = '<p><a href="'+url+'">'+element.innerHTML+'</a></p>';
-                                        $('pulsestorm_launcher_results').insert(row);
-                                        //console.log(element);
-                                        //console.log(element.parentNode);
-                                    });
-                                }    
-                            });                    
 
-                            search_requests.push(search_request);
+                                var url = pulsestorm_launcher_search_url.url;
+                                url += ('?query='+$F('pulsestorm_launcher_input'));
+                                // var url = 'http://magento1point7pointzeropoint1.dev/index.php/admin/index/globalSearch/key/ac3d62400d96f06be161863f7e4470d3/?query=nokia';
 
-                        }, 100);
-                    }
-                    
+                                var img = new Element('img');
+                                img.src = '/skin/adminhtml/default/default/images/ajax-loader.gif';
+                                var p = new Element('p');
+                                p.insert(img);
+                                p.id = 'pulsestorm_launcher_throbber';
+                                $('pulsestorm_launcher_results').insert(p);
+
+                                var search_request = new Ajax.Request(url, {
+                                    method: 'get',
+                                    onSuccess: function(transport) {
+                                        var container = new Element('div');
+                                        container.update(transport.responseText);
+                                        $('pulsestorm_launcher_throbber').remove();
+                                        container.getElementsBySelector('li strong').each(function(element){
+                                            if(!element.parentNode)
+                                            {
+                                                return;
+                                            }
+
+                                            var url = $(element.parentNode).readAttribute('url');
+                                            var row = '<p><a href="'+url+'">'+element.innerHTML+'</a></p>';
+                                            $('pulsestorm_launcher_results').insert(row);
+                                            //console.log(element);
+                                            //console.log(element.parentNode);
+                                        });
+                                    }
+                                });
+
+                                search_requests.push(search_request);
+
+                            }, 100);
+                        }
+                    <?php endif; ?>
+
                     //perform instant nav/config search
                     var results = pulsestorm_launcher_search_menu($F('pulsestorm_launcher_input'));
                     if(!$(results).collect)

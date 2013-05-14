@@ -65,6 +65,7 @@
 	        <options>
 	            <shortcut_code_first>17</shortcut_code_first>
 	            <shortcut_code_second>77</shortcut_code_second>
+                <global_search_enabled>1</global_search_enabled>
 	        </options>
 	    </pulsestorm_launcher>
 	</default>
