@@ -16,6 +16,17 @@
 			</pulsestorm_launcher>
 		</routers>
 	</frontend>
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <Pulsestorm_Launcher after="Mage_Adminhtml">Pulsestorm_Launcher</Pulsestorm_Launcher>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>	
 	<global>
 		<blocks>
 			<pulsestorm_launcher>
@@ -65,7 +76,6 @@
 	        <options>
 	            <shortcut_code_first>17</shortcut_code_first>
 	            <shortcut_code_second>77</shortcut_code_second>
-                <global_search_enabled>1</global_search_enabled>
 	        </options>
 	    </pulsestorm_launcher>
 	</default>
